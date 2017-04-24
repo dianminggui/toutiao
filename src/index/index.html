@@ -2,10 +2,27 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>头条</title>
+  <meta name="viewport" content="width=device-width">
+  <title>仿今日头条首页</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="app"></div>
+  <div id="app" v-cloak>
+    <div class="container">
+      <div class="nav">
+        <a href="javascript:void(0);" v-for="type in types" class="nav__item" @click="fetchArticles(type.id)" :class="{'nav__item--selectd': type.id === currType}">{{type.name}}</a>
+      </div>
+
+      <div class="article">
+        <a class="article__item" href="javascript:void(0);"  v-for="article in articles" @click="viewArticle(article)">
+          <h2 class="article__title">{{article.title}}</h2>
+         <div class="article__describe">
+           {{article.author}} ⋅{{article.time}}
+         </div>
+        </a>
+      </div>
+    </div>
+  </div>
   <script src="https://unpkg.com/vue@2.2.6"></script>
   <script src="https://unpkg.com/axios@0.16.1/dist/axios.min.js"></script>
   <script src="http://mockjs.com/dist/mock.js"></script>
