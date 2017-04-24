@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<title>今日头条home</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<script src="vue.min.js"></script>
+	<script src="axios.min.js"></script>
+</head>
+<body>
+	<div id="app">
+		<ul class="content-list">
+			<li v-for="item in dataList">
+				<h4><a class="item-title" :href="'/detail.html?itemId='+item.id">{{item.title}}</a></h4>
+
+				<p class="create-info">
+					<span class="time">{{item.create_at}}</span>
+					<a :href="'/user?username=' +　item.author.loginname"><img class="avatar" :src="item.author.avatar_url"></a>
+				</p>
+
+			</li>
+		</ul>
+	</div>
+	<script>
+		var BASE_URL = 'https://cnodejs.org/api/v1'
+		var vm = new Vue({
+			el:'#app',
+			created(){
+				var _this = this;
+				axios.get(BASE_URL + '/topics',{
+					params:{
+						page:1,
+						tab:'all',
+						limit:10
+					}
+				}).then(function(res){
+					console.log(res.data.data);
+					_this.dataList = res.data.data;
+				}).then(function(err){
+					console.log(err)
+				})
+			},
+			data:{
+				dataList:[]
+			}
+		})
+	</script>
+</body>
+</html>

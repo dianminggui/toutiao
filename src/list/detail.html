@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>今日头条home</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<script src="vue.min.js"></script>
+	<script src="axios.min.js"></script>
+</head>
+<body>
+	<div class="back">
+		<a href="javascript:history.go(-1)">返回</a>
+	</div>
+	<div id="app">
+		<div class="detail">
+			<div class="title"><h4>{{detail.title}}</h4></div>
+			<div class="detail-content" v-html="detail.content"></div>
+		</div>
+		<div class="discuss">
+			<button class="write-discuss" @click="openModal">发表评论</button>
+			<h5>评论列表</h5>
+			<ul class="discuss-list" v-if="discuss.length">
+				<li class="discuss-item" v-for="item in discuss">
+					<div class="userinfo">
+						<span class="user-info">{{item.name}}</span>
+						<p><img class="avatar" src="avatar.png"></p>
+					</div>
+					<p class="discuss-content">{{item.content}}</p>
+				</li>
+			</ul>
+		</div>
+		<!-- 自定义评论弹出框 -->
+		<div class="discuss-modal" v-if="modalFalg">
+			<div class="modal-title"><h4>发表评论</h4></div>
+			<div class="model-content">
+				<div class="form-group">
+					<label>用户名：</label>
+					<input type="text" name="userinfo" v-model="userinfo">
+				</div>	
+				<div class="form-group">
+					<label>评论内容：</label>
+					<textarea v-model="content"></textarea>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<input type="button" @click="publicDiscuss" value="发布">
+				<button @click="closeModal">关闭</button>
+			</div>
+		</div>
+		<div class="mask" v-show="modalFalg"></div>
+	</div>
+	<script>
+		var BASE_URL = 'https://cnodejs.org/api/v1/topic/'
+		var vm = new Vue({
+			el:'#app',
+			created(){
+				var id = getArticleId();
+				var _this = this;
+				axios.get(BASE_URL + id).then(function(res){
+					if(res.status === 200){
+						_this.detail = res.data.data;
+						console.log(_this.detail);
+					}
+				}).then(function(err){
+					console.log(err);
+				})
+			},
+			data:{
+				detail:{},
+				discuss:[
+					{userinfo:'lzy',content:'这是一条简单的评论'}
+				],
+				userinfo:'',
+				content:'',
+				modalFalg:false
+			},
+			methods:{
+				publicDiscuss(){
+					var obj = {
+						userinfo:this.userinfo,
+						content:this.content
+					}
+					this.discuss.unshift(obj)
+					this.modalFalg = false
+				},
+				openModal(){
+					this.modalFalg = true
+				},
+				closeModal(){
+
+					this.modalFalg = false
+					console.log(this.modalFalg);
+				}
+			}
+		})
+		function getArticleId(){
+			return window.location.search.split('=')[1];
+		}
+	</script>
+</body>
+</html>

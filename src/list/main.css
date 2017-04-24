@@ -1,0 +1,116 @@
+li{
+	list-style: none;
+}
+html,body,#app{
+	width: 100%;
+	height: 100%;
+	background-color: #fff;
+}
+.detail-content,.discuss{
+	padding: 0;
+}
+.discuss-item{
+	overflow: hidden;
+	padding: 0 10px;
+}
+.discuss-content{
+	margin-left: 20px;
+	padding: 0 10px;
+}
+.discuss-list{
+	margin: 0 10px;
+	font-size: 0;
+}
+.discuss-item *{
+	display: inline-block;
+	font-size: 14px;
+	vertical-align: middle;
+}
+.avatar{
+	width: 32px;
+	height: 32px;
+	border-radius: 50%!important;
+}
+.write-discuss{
+	float: right;
+}
+.discuss-modal{
+	position: fixed;
+	top: 50%;
+	margin-top: -100px;
+	width: 100%;
+	height: 200px;
+	z-index: 10;
+	background-color: #fff;
+	text-align: center;
+}
+.mask{
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.2);
+}
+.form-group{
+	margin-bottom: 20px;
+}
+.form-group label{
+	display: inline-block;
+	width: 100px;
+}
+.modal-title{
+	margin-bottom: 15px;
+	border-bottom: 1px solid #ccc;
+}
+.discuss-item{
+	border-bottom: 1px solid #ccc;
+	margin-bottom: 10px;
+}
+.discuss-item:last-child{
+	margin: 0;
+	border；0；
+}
+.content-list{
+	margin: 0;
+}
+
+
+.content-list li{
+	margin-bottom: 10px;
+	border-bottom: 1px solid #ccc;
+	padding: 0 10px;
+}
+.content-list .time{
+	margin-right: 10px;
+	font-size: 12px;
+	float: right;
+}
+.create-info *{
+	display: inline-block;
+	vertical-align: middle;
+}
+.userinfo *{
+	display: inline-block;
+	vertical-align: middle;
+}
+.userinfo .user-avatar img{
+	width: 120px!important;
+	height: 120px!important;
+	border-radius: 50%;
+}
+.userinfo .loginname{
+	font-size: 16px;
+	margin-right:30px;
+}
+.userinfo .user-avatar{
+	display: block;
+	text-align: center;
+}
+.userinfo .user-name{
+	display: block;
+	text-align: center;
+}
+.create-info{
+	overflow: hidden;
+}

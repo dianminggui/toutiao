@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,height=device-height,maximum-scale=1.0,user-scalable=no">
+	<link rel="stylesheet" type="text/css" href="detail.css">
+	<script type="text/javascript" src="./vue.js"></script>
+	<script src="./articleData.js"></script>
+</head>
+<body>
+<div id="detail">
+	<!--文章标题部分-->
+	<h1 class="title">{{article.title}}</h1>
+
+	<!--文章作者，作者头像，文章上传时间等小信息-->
+	<div class="information">
+		<div class="userLogo">
+			<img :src="article.author.logo" />
+		</div>
+		<div class="userName">
+			<span class="name">{{article.author.name}}</span><img src="./image/toutiao.png" /><br />
+			<span class="time">{{article.time}}</span>
+		</div>
+		<a href="#" class="about">+关注</a>
+	</div>
+
+	<!--文章的内容-->
+	<p class="content" v-html="article.content" :class="{more:moreContent}">
+		<div class="moreContent" @click="getmore" v-show="!moreContent">展开全文 v</div>
+	</p>
+
+	<!--文章的相关评论-->
+	<div class="discusses">
+		<h2 class="title2">热门评论</h2>
+		<discuss :discuss="item" v-for="item of article.discussList" @add="addAgree(item)" @back="backAgree(item)"></discuss>
+		<a href="#" class="moreDiscuss">打开今日头条, 查看全部98条评论</a>
+	</div>
+
+	<!--文章推荐-->
+	<div class="recommends">
+		<h2 class="title2">精彩推荐</h2>
+		<recommend :recommend="item" v-for="item of recommends"></recommend>
+	</div>
+
+<a href="#" class="downloadSoft">都翻到这儿了，就下载个头条吧~</a>
+</div>
+
+<!--template模板discuss-->
+<script type="x-template" id='discuss'>
+		<div class="discuss">
+			<div class="userLogo">
+				<img :src="discuss.logo" />
+			</div>
+			<div class="discussContent">
+				<div>
+					<span>{{discuss.username}}</span>
+					<span class="agree" :class="{agreeTo:agree}" @click="addAgree">{{discuss.agree}}</span>
+				</div>
+				<p>{{discuss.say}}</p>
+			</div>
+		</div>
+</script>
+
+<!--template模板recommend-->
+<script type="x-template" id='recommend'>
+	<div class="recommend">
+		<div class="recommendLeft">
+			<p class="recommendTitle">{{recommend.title}}</p>
+			<div class="recommendLeftBottom">
+				<a href="#" class="download">下载头条观看</a>
+				<span class="tip">{{recommend.author}}</span><span class="tip">{{recommend.time}}</span>
+			</div>
+		</div>
+		<div class="recommendRight">
+			<img :src="recommend.pic" />
+		</div>
+		<a :href="recommend.url" class="recommendUrl"></a>
+	</div>
+</script>
+
+<script>
+	//discuss组件
+	Vue.component('discuss',{
+								template:`#discuss`,
+								props:['discuss'],
+								data:function(){
+									return {agree:false}
+								},
+								methods:{
+									addAgree(event){
+										if(!this.agree){
+											this.$emit('add');	
+											this.agree = true;
+										}
+										else{
+											this.$emit('back');		
+											this.agree = false;
+										}
+										
+									}
+								}
+							}
+	);
+
+		//recommend组件
+	Vue.component('recommend',{
+								template:'#recommend',
+								props:['recommend']
+							}
+	);
+
+
+	
+	function watch(){
+		var hash = window.location.hash;
+		vm.id=hash;
+	}
+	window.onhashchange = watch;
+
+	function getArticle(id){//根据文章id去articles数组中找到相应文章数据
+		var article;
+		articles.forEach(function(item){
+			if(item.id === id){
+				article = item.article;			
+			}
+		});
+		if(!article){
+			articles.forEach(function(item){
+			if(item.id === '#article1'){
+				article = item.article;				
+			}
+		});
+		}
+		return article;
+	}
+	var vm = new Vue({
+			el:'#detail',
+			data:{
+				id:'#article1',//获取文章id		
+				recommends:recommends,
+				moreContent:false
+			},
+			computed:{
+				article(){
+					return getArticle(this.id)
+				}
+			},
+			methods:{
+				addAgree(item){
+					item.agree++;
+
+				},
+				backAgree(item){
+					item.agree--;
+				},
+				getmore(){
+					this.moreContent = true;
+				},
+				changeId(){
+					console.log(this.id);
+				}
+			}
+		});
+</script>
+</body>
+</html>

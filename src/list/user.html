@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>今日头条home</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<script src="vue.min.js"></script>
+	<script src="axios.min.js"></script>
+</head>
+<body>
+	<div class="back">
+		<a href="javascript:history.go(-1)">返回</a>
+	</div>
+	<div id="app">
+	<div class="userinfo">
+		<p class="user-avatar"><img :src="articleList.avatar_url"></p>
+		<p class="user-name"><span class="loginname">{{articleList.loginname}}</span>
+		<span>15关注</span></p>
+	</div>
+		<h4>最近发布</h4>
+		<ul class="content-list">
+			<li v-for="item in articleList.recent_topics">
+				<h4><a c.lass="item-title" :href="'/detail.html?itemId='+item.id">{{item.title}}</a></h4>
+
+				<p class="create-info">
+					<span class="time">{{item.last_reply_at}}</span>
+				</p>
+
+			</li>
+		</ul>
+	</div>
+	<script>
+		var BASE_URL = 'https://cnodejs.org/api/v1/user/'
+		var vm = new Vue({
+			el:'#app',
+			created(){
+				var loginname = getArticleName();
+				console.log(loginname);
+				var _this = this;
+				axios.get(BASE_URL + loginname).then(function(res){
+					console.log(res.data.data)
+					if(res.status === 200){
+						_this.articleList = res.data.data;
+					}
+				})
+			},
+			data:{
+				articleList:[]
+			},
+			methods:{
+				
+			}
+		})
+		function getArticleName(){
+			return window.location.search.split('=')[1];
+		}
+	</script>
+</body>
+</html>
